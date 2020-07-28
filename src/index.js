@@ -1,37 +1,19 @@
 import { createStore } from 'redux'; //подключили функцию из redux
-
-const reducer = (state = 0, action) => { // state по дефолту сделали 0
-  switch (action.type) { //проверяеи если тип екшена равен INC или DEC
-    case 'INC':
-      return state + 1;
-    case 'DEC':
-      return state - 1;
-    case 'RND':
-      return state + action.value;
-    default:
-      return state; // если неизвестный тип екшена
-  }
-
-}
-
-const inc = () => { // экшн криейтор (создали экшн)
-  return {
-    type: 'INC'
-  }
-}
-
+import reducer from './reducer';
+import { inc, dec, rnd } from './actions';
 
 const store = createStore(reducer); // создали store при помощи функции createStore
+const { dispatch } = store;
 
-document.getElementById('inc').addEventListener('click', () => {
-  store.dispatch(inc()) //передаем в store action type: 'INC' с помощью екшн криейтора
-});
-document.getElementById('dec').addEventListener('click', () => {
-  store.dispatch({ type: 'DEC' }) //передаем в store action type: 'DEC'
-});
+const incDispatch = () => dispatch(inc()); // создал функцию передающую action creator inc в store через dispatch
+const decDispatch = () => dispatch(dec());
+const rndDispatch = (value) => dispatch(rnd(value));
+
+document.getElementById('inc').addEventListener('click', incDispatch); //с помощью dispatch передаем в store action type: 'INC' используя екшн криейтор
+document.getElementById('dec').addEventListener('click', decDispatch); //передаем в store action type: 'DEC'
 document.getElementById('rnd').addEventListener('click', () => {
   const value = Math.floor(Math.random() * 10);
-  store.dispatch({ type: 'RND', value }) //передаем в store action type: 'DEC'
+  rndDispatch(value) //передаем в store action type: 'RND'
 });
 
 
